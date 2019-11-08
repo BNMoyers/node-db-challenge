@@ -1,5 +1,5 @@
 //imports and dependencies
-db = require('../dbConfig.js');
+db = require('../data/dbConfig.js');
 
 //exports
 module.exports = {
@@ -7,7 +7,7 @@ module.exports = {
     getById,
     add,
     update,
-    delete
+    remove
 };
 
 //helper functions
@@ -24,9 +24,9 @@ function getById(id) {
 function add(resource) {
     return db('resources')
             .insert(resource)
-            .then(ids => {
-                return getById(ids[0])
-            });
+            // .then(ids => {
+            //     return getById(ids[0])
+            // });
 }
 
 function update(id, changes) {
@@ -35,7 +35,7 @@ function update(id, changes) {
             .update(changes);
 }
 
-function delete(id) {
+function remove(id) {
     return db('resources')
             .where('id', id)
             .del();

@@ -2,7 +2,7 @@
 const express = require('express');
 const db = require('./data/dbConfig');
 const projectsRouter = require('./projects/projectsRouter');
-const resourcesRouter = require('./projects/resourcesRouter')
+const resourcesRouter = require('./resources/resourcesRouter')
 
 
 //server

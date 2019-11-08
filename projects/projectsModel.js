@@ -1,5 +1,5 @@
 //imports and dependencies
-db = require('../dbConfig.js');
+const db = require('../data/dbConfig.js');
 
 //exports
 module.exports = {
@@ -12,8 +12,8 @@ module.exports = {
     addTask,
     update,
     updateTask,
-    delete,
-    deleteTask
+    remove,
+    removeTask
 };
 
 //helper functions
@@ -31,34 +31,29 @@ function boolToInt (bool) {
 
 function get() {
     return db('projects')
-                .intToBool();
 }
 
 function getById(id) {
     return db('projects')
-            .intToBool()
             .where({ id })
 }
 
 function getTasks(project_id) {
     return db('tasks')
-            .intToBool()
             .where('project_id', project_id)
             .first();
 }
 
 function add(project) {
     return db('projects')
-            .boolToInt()
             .insert(project)
             .then(ids => {
                 return getById(ids[0])
             });
 }
 
-function add(task) {
+function addTask(task) {
     return db('tasks')
-            .boolToInt()
             .insert(task)
             .then(id => {
                 return db('tasks')
@@ -67,23 +62,21 @@ function add(task) {
 }
 function update(id, changes) {
     return db('projects')
-            .boolToInt()
             .where({ id })
             .update(changes);
 }
 function updateTask(id, changes) {
     return db('tasks')
-            .boolToInt()
             .where({ id })
             .update(changes);
 }
 
-function delete(id) {
+function remove(id) {
     return db('projects')
             .where('id', id)
             .del();
 }
-function deleteTask(id) {
+function removeTask(id) {
     return db('tasks')
             .where('id', id)
             .del();
