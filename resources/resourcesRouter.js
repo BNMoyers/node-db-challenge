@@ -26,6 +26,19 @@ router.get("/", (req, res) => {
     });
 });
 
+router.get('/:id', (req, res) => {
+    const { id } = req.params
+    db.getById(id)
+        .then(resources => {
+            resource
+            ? res.json(resource)
+            : res.status(404).json('no resource to retrieve')
+        })
+        .catch(err => {
+            res.status(500).json('could not get resource')
+        })
+})
+
 //Edit
 
 //Delete

@@ -23,10 +23,8 @@ function getById(id) {
 
 function add(resource) {
     return db('resources')
-            .insert(resource)
-            // .then(ids => {
-            //     return getById(ids[0])
-            // });
+            .insert(resource);
+   
 }
 
 function update(id, changes) {

@@ -15,13 +15,24 @@ router.post("/", validateProject, (req, res) => {
     });
 });
 
-// router.post('/:id/tasks', validateProjectId, validateTask, (req, res) => {
-//     const body = req.body;
-//     body.project_id = req.params.id;
+router.post('/:id/tasks', validateProjectId, validateTask, (req, res) => {
+    const taskBody = req.body;
+    const { id } = req.params
 
-//     db
-//         .add(body)
-// })
+    db
+        .getById(id)
+        .then(project => {
+          project 
+            ? project.addTask(taskBody, id)
+                .then(task => {
+                  res.status(201).json(task);
+                })
+            : res.status(404).json('cannot find project')
+        })
+        .catch (err => {
+          res.status(500).json('cannot post task')
+        })
+})
 
 //Read
 router.get("/", (req, res) => {
@@ -40,7 +51,17 @@ router.get("/:id", validateProjectId, (req, res)=>{
 })
 
 router.get("/id/tasks", validateProjectId, (req, res) => {
+  const { id } = req.params;
 
+  db.getTasks(id)
+    .then(tasks => {
+      tasks.length 
+        ? res.json(tasks)
+        : res.status(404).json('no tasks to find')
+    })
+    .catch(err => {
+      res.status(500).json('could not retrieve tasks')
+    })
 })
 
 //Edit
