@@ -15,29 +15,26 @@ router.post("/", validateProject, (req, res) => {
     });
 });
 
-router.post('/:id/tasks', validateProjectId, validateTask, (req, res) => {
-    const taskBody = req.body;
-    const { id } = req.params
+router.post("/:id/tasks", validateProjectId, validateTask, (req, res) => {
+  const taskBody = req.body;
+  const { id } = req.params;
 
-    db
-        .getById(id)
-        .then(project => {
-          project 
-            ? project.addTask(taskBody, id)
-                .then(task => {
-                  res.status(201).json(task);
-                })
-            : res.status(404).json('cannot find project')
-        })
-        .catch (err => {
-          res.status(500).json('cannot post task')
-        })
-})
+  db.getById(id)
+    .then(project => {
+      project
+        ? project.addTask(taskBody, id).then(task => {
+            res.status(201).json(task);
+          })
+        : res.status(404).json("cannot find project");
+    })
+    .catch(err => {
+      res.status(500).json("failed to add task");
+    });
+});
 
 //Read
 router.get("/", (req, res) => {
-  db
-    .get()
+  db.get()
     .then(projects => {
       res.json(projects);
     })
@@ -46,23 +43,21 @@ router.get("/", (req, res) => {
     });
 });
 
-router.get("/:id", validateProjectId, (req, res)=>{
-    res.status(201).json(req.project);
-})
+router.get("/:id", validateProjectId, (req, res) => {
+  res.status(201).json(req.project);
+});
 
-router.get("/id/tasks", validateProjectId, (req, res) => {
-  const { id } = req.params;
+router.get("/:id/tasks", (req, res) => {
+  const { id } = req.params.id;
 
   db.getTasks(id)
     .then(tasks => {
-      tasks.length 
-        ? res.json(tasks)
-        : res.status(404).json('no tasks to find')
+      res.status(200).json(tasks)
     })
     .catch(err => {
-      res.status(500).json('could not retrieve tasks')
-    })
-})
+      res.status(500).json("could not retrieve tasks");
+    });
+});
 
 //Edit
 
@@ -73,12 +68,11 @@ router.get("/id/tasks", validateProjectId, (req, res) => {
 function validateProject(req, res, next) {
   const name = req.body.project_name;
 
-  !name ? res.status(400).json("please enter a project name")
-   : next();
+  !name ? res.status(400).json("please enter a project name") : next();
 }
 
 function validateProjectId(req, res, next) {
-  const id = req.params.id;
+  const { id } = req.params;
   db.getById(id)
     .then(project => {
       !project
@@ -87,7 +81,7 @@ function validateProjectId(req, res, next) {
       next();
     })
     .catch(err => {
-      res.status(400).json({ err });
+      res.status(500).json("failed to validate project id");
     });
 }
 

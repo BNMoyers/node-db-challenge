@@ -60,9 +60,9 @@ Take the steps necessary to complete the project from scratch. Start by initiali
 
 Complete the following tasks:
 
-- [ ] Design the data model and use _knex migrations_ to create the database and tables.
+- [x] Design the data model and use _knex migrations_ to create the database and tables.
 - [ ] Build an API with endpoints for:
-  - [ ] adding resources.
+  - [x] adding resources.
   - [ ] retrieving a list of resources.
   - [ ] adding projects.
   - [ ] retrieving a list of projects.

@@ -4,7 +4,7 @@ const db = require("../data/dbConfig.js");
 //exports
 module.exports = {
   intToBool,
-  boolToInt,
+  spreadTask,
   get,
   getTasks,
   getById,
@@ -16,12 +16,17 @@ module.exports = {
 };
 
 //helper functions
+
 function intToBool(int) {
-  return int === 1 ? true : false;
+    return int === 1 ? true : false; 
 }
 
-function boolToInt(bool) {
-  return bool === true ? 1 : 0;
+
+function spreadTask(task) {
+    return {
+        ...task,
+        task_completion: intToBool(task.task_completion)
+    }
 }
 
 function get() {
@@ -35,16 +40,16 @@ function getById(id) {
 }
 
 function getTasks(id) {
-  return db("tasks")
-    .join("projects", "projects.id", "tasks.project_id")
+  return db("projects")
+    .join("tasks", "projects.id","tasks.project_id" )
     .select(
-      "tasks.id",
+      "projects.id",
       "projects.project_name",
       "projects.project_description",
       "tasks.task_description"
     )
-    .where("project_id", project_id)
-    .first();
+    .where({project_id: id})
+    .then(tasks => tasks.map(task => spreadTask(task)));
 }
 
 function add(project) {
