@@ -61,9 +61,10 @@ router.get('/:id/tasks', (req, res) => {
   const { id } = req.params;
 
   db.retrieveTasks(id)
-    .then(tasks => 
-      let taskList = tasks.map(task => ({...task})))
-      res.status(201).json(taskList)
+    .then(tasks => {
+      let taskList = tasks.map(task => ({...task}))
+       return  res.status(201).json(taskList)
+    })
     .catch(err => {
       res.status(500).json({errorMessage: 'Failed to get Tasks'})
     }
