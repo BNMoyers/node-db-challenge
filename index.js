@@ -1,6 +1,6 @@
 //dependencies and imports
-require('dotenv').config();
 const server = require('./server.js');
+require('dotenv').config();
 
 //port
 

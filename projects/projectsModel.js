@@ -13,7 +13,13 @@ module.exports = {
 //helper functions
 
 function retrieve() {
-  return db("projects");
+  return db("projects")
+  .then(projects => {
+    return projects.map(project => {
+      project.project_completion = project.project_completion ? true: false;
+      return project;
+    })
+  });
 }
 
 function retrieveById(id) {
